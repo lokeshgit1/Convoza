@@ -1,6 +1,6 @@
 import express from 'express';
 import { ENV } from './config/env.js';
-import { connetDB } from './config/db.js';
+import { connectDB } from './config/db.js';
 import {clerkMiddleware} from '@clerk/express';
 import { functions, inngest } from './config/inngest.js';
 import {serve} from "inngest/express";
@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 
 const startServer = async () => {
   try {
-    await connetDB();
+    await connectDB();
     if ( ENV.MODE_ENV != " production")
     {
       app.listen(ENV.PORT, () => {
