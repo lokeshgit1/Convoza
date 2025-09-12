@@ -7,7 +7,7 @@ export const inngest = new Inngest({ id: "my-app" });
 
 const syncUser = inngest.createFunction(
     {id: "sync-user"}, 
-    {event: "clerk/user.created"},
+    {event:"clerk/user.created"},
     async ({event}) => {
         await connetDB();
 
@@ -18,7 +18,7 @@ const syncUser = inngest.createFunction(
             name: `${first_name || ""} ${last_name || ""}`,
             image: image_url,
         }
-        await User.create({ newUser }) 
+        await User.create( newUser );
 
         //todo do more thinngs here like send welcome email etc
     }
