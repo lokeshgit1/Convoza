@@ -7,8 +7,9 @@ export const inngest = new Inngest({ id: "my-app" });
 
 const syncUser = inngest.createFunction(
     {id: "sync-user"}, 
-    {event:"clerk/user.created"},
+    {event:"Sync/user.created"},
     async ({event}) => {
+
         await connectDB();
 
         const {id, email_addresses, first_name, last_name, image_url} = event.data;
@@ -26,13 +27,11 @@ const syncUser = inngest.createFunction(
 
 const deleteUserFromDB = inngest.createFunction(
     {id: "delete-user-from-db"}, 
-    {event: "clerk/user.deleted"},
+    {event: "Sync/user.deleted"},
     async ({event}) => {
         await connectDB();
         const {id} = event.data;
         await User.deleteOne({clerkId: id});
-       // await deleteStreamUser(id.toString());
-
         //todo do more thinngs here like send welcome email etc
     }
 );
