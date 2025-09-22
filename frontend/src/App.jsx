@@ -7,6 +7,17 @@ import * as Sentry from "@sentry/react";
 const SentryRoutes = Sentry.withSentryReactRouterV7Routing(Routes);
 
 
+/**
+ * Root application component that renders auth-aware routes and a Sentry test button.
+ *
+ * When the user is signed in, renders instrumented routes (via SentryRoutes) that show
+ * HomePage at "/" and redirect "/auth" to "/". When the user is signed out, renders
+ * instrumented routes that show AuthPage at "/auth" and redirect any other path to "/auth".
+ * Includes a developer-facing button that throws an Error ("Test Sentry Error") to verify
+ * Sentry error capture.
+ *
+ * @returns {JSX.Element} The app's top-level React element.
+ */
 export default function App() {
  
   return (
