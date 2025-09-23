@@ -15,9 +15,9 @@ const app = express();
 
 app.use(express.json());
 
-app.use(cors({origin:ENV.CLIENT_URL,credentials: true}));
-
 app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
+
+
 
 app.use(clerkMiddleware()); // req.auth will be available in the request object  
 
