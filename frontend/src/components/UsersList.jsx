@@ -8,8 +8,7 @@ import { CircleIcon } from "lucide-react";
 
 const UsersList = ({ activeChannel }) => {
   const { client } = useChatContext();
-  const [_, setSearchParams] = useSearchParams();
-
+  const [, setSearchParams] = useSearchParams();
   const fetchUsers = useCallback(async () => {
     if (!client?.user) return;
 
@@ -51,8 +50,8 @@ const UsersList = ({ activeChannel }) => {
       await channel.watch();
       setSearchParams({ channel: channel.id });
     } catch (error) {
-      console.log("Error creating DM", error),
-        Sentry.captureException(error, {
+      console.log("Error creating DM", error);        
+      Sentry.captureException(error, {
           tags: { component: "UsersList" },
           extra: {
             context: "create_direct_message",
@@ -81,8 +80,7 @@ const UsersList = ({ activeChannel }) => {
             key={user.id}
             onClick={() => startDirectMessage(user)}
             className={`str-chat__channel-preview-messenger  ${
-              isActive && "!bg-black/20 !hover:bg-black/20 border-l-8 border-purple-500 shadow-lg0"
-            }`}
+              isActive && "!bg-black/20 !hover:bg-black/20 border-l-8 border-purple-500 shadow-lg"            }`}
           >
             <div className="flex items-center gap-2 w-full">
               <div className="relative">
