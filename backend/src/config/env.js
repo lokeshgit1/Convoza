@@ -1,6 +1,7 @@
+import { Client } from "@clerk/express";
 import "dotenv/config";
 
-export const ENV ={
+export const ENV = {
     PORT: process.env.PORT || 5000,
     MONGODB_URI: process.env.MONGODB_URI,
     MODE_ENV: process.env.MODE_ENV,
