@@ -1,7 +1,7 @@
 import { Inngest } from "inngest";
 import { connectDB } from "./db.js";
 import { User } from "../models/user.model.js";
-import { upsertStreamUser, deleteStreamUser } from "./stream.js";
+import { upsertStreamUser, deleteStreamUser, addUserToPublicChannels} from "./stream.js";
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "my-app" });
@@ -14,6 +14,7 @@ const syncUser = inngest.createFunction(
         await connectDB();
 
         const { id, email_addresses, first_name, last_name, image_url } = event.data;
+        
         const newUser = {
             clerkId: id,
             email: email_addresses[0]?.email_address,
@@ -28,7 +29,7 @@ const syncUser = inngest.createFunction(
             image: newUser.image,
         });
 
-        // await addUserToPublicChannels(newUser.clerkId.toString());
+        await addUserToPublicChannels(newUser.clerkId.toString());
     }
 );
 
