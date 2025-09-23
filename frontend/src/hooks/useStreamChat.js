@@ -15,29 +15,37 @@ export const useStreamChat = () => {
     //fetch stream token using react-query
 
     const {
-        data: streamToken,
-        isLoading: tokenLoading,
-        error: tokenError,
+        data: tokenData,
+        isLoading,
+        error,
     } = useQuery({
         queryKey: ['streamToken'],
         queryFn: getStreamToken,
-        enabled: !!user, //only fetch the token if the user is available
+        enabled: !!user?.id, //only fetch the token if the user is available
     });
 
     //init stream chat client
     useEffect(() => {
-        const initChat = async () => {
-            if (!tokenData?.token || !user) return;
+
+        if (!tokenData?.token || !user?.id || !STREAM_API_KEY) return;
+
+        const client = StreamChat.getInstance(STREAM_API_KEY)
+        let cancelled = false;
+
+        const connect = async () => {
             try {
-                const client = StreamChat.getInstance(STREAM_API_KEY)
+
                 await client.connectUser({
                     id: user.id,
-                    name: user.fullName,
-                    image: user.imageUrl
-                })
-                setChatClient(client);
-
-
+                    name:
+                        user.fullName ?? user.username ?? user.primaryEmailAddress?.emailAddress ?? user.id,
+                    image: user.imageUrl ?? undefined,
+                },
+                    tokenData.token
+                );
+                if (!cancelled) {
+                    setChatClient(client);
+                }
             } catch (error) {
                 console.log("Error connecting to stream", error)
                 Sentry.captureException(error, {
@@ -51,17 +59,16 @@ export const useStreamChat = () => {
             }
         };
 
-        initChat();
+        connect();
 
         //cleanup
         return () => {
-            if(chatClient) chatClient.disconnectUser()
-        }
+            cancelled = true;
+            client.disconnectUser()
+        };
+    }, [tokenData?.token, user?.id]);
 
-
-    }, [token,user,chatClient]);
-
-    return {chatClient, isLoading:tokenLoading, error: tokenError}
+    return { chatClient, isLoading, error }
 };
 
 
