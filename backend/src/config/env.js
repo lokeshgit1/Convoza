@@ -1,4 +1,3 @@
-import { Client } from "@clerk/express";
 import "dotenv/config";
 
 export const ENV = {
